@@ -1,0 +1,11 @@
+language: node_js
+node_js: node
+services:
+- mongodb
+deploy:
+  provider: heroku
+  api_key:
+    secure: ygx3lRAnjdv2ELnStWmGMFSpTYM1ZRfmTfICbt8ajCuoruxLLJ32pwfQWbjHO+5F15LiN5J/Yp1zr81D8vPzx+EtGHHeiQ8NhKwbF+yNXpY1NaisiOiP4LKaiBw1lBw8a+P6R6gfLDg6VjVzF3y9xQLc9Gz9wH7JSr/8r4cGesWVLSAbG3c6epQ8A2e7XRiw1OvVYUmIAS0xXkVMhcSJCeIlHwmAl0VjsnWCnpwEHNXqA7TNRhGhZodU+4dUuWzFeopUm3XbvM0Dugx7rFGEC9wp2r+KyzScyjQCrk+6FykSCfWpbbRpMBvklUCLeoIBe+DZ1bBYzGAH6Eq9rSNinN0gQPLZk0j4mQ8jfmwU9lm0Zs1yvipnSZcuyRrPnmGBinI1YNG2bG6II4QHDVxU5DcVAKNJZL8xc5ozabTSlXAG6l9+e1OpIF8B0sZP6FiMVD460SIyE/hmMYfvYE6GaglHYAZhs8GBga6c+9Quw7eO7PZIi1VucSNlz6/ity7dtQme6jhDstUp6om7I/tq7NO8IFdSakk7XqKQJrouXFC+NqL08znGfCJOorqdZ0nueGjbQVzG9WpuxdKW3ZO7aRBJ+VWmIkZ10vBpvt+jcTTii84/pXshSbpe2HlTEuNi2VV7jwh63KkBg92ocKsaVEvD1vrb1c7//JHj8C5v42U=
+  app: damp-chamber-80192
+  on:
+    repo: annahisenberg/react-capstone-api
