@@ -15,6 +15,9 @@ app.use(
     })
 );
 
+app.use(express.urlencoded({ extended: true }));
+
+
 // Routes
 app.use('/api', blogPostRouter);
 
@@ -69,5 +72,5 @@ if (require.main === module) {
     runServer(DATABASE_URL).catch(err => console.error(err));
 }
 
-module.exports = { app };
+module.exports = { app, runServer, closeServer };
 
