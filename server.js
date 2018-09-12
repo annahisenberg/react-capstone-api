@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const { DATABASE_URL, PORT } = require('./config');
+const blogPostRouter = require('./routers/blog-post-router');
+const BlogPost = require('./models/blog-post-model');
 
 const cors = require('cors');
 const { CLIENT_ORIGIN } = require('./config');
@@ -12,6 +14,11 @@ app.use(
         origin: CLIENT_ORIGIN
     })
 );
+
+// Routes
+app.use('/api', blogPostRouter);
+
+
 
 app.get('/api/*', (req, res) => {
     res.json({ ok: true });
