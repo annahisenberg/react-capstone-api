@@ -10,9 +10,8 @@ router.get('/posts', (req, res) => {
             res.json(posts);
         })
         .catch(err => {
-            console.error(err);
             res.status(500).json({
-                error: 'something went wrong'
+                error: err.message
             });
         });
 
@@ -26,9 +25,8 @@ router.get('/posts/:id', (req, res) => {
         .findById(id)
         .then(post => res.json(post))
         .catch(err => {
-            console.lerror(err);
             res.status(500).json({
-                error: 'something went wrong'
+                error: err.message
             });
         });
 
@@ -51,21 +49,14 @@ router.post('/posts', (req, res) => {
         .create(payload)
         .then(newPost => res.status(201).json(newPost))
         .catch(err => {
-            console.error(err);
             res.status(500).json({
-                error: 'Something went wrong'
+                error: err.message
             });
         })
 });
 
 //update post
 router.put('/posts/:id', (req, res) => {
-    if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
-        return res.status(400).json({
-            error: 'Request path id and request body id values must match.'
-        });
-    }
-
     const updated = {};
     const updateableFields = [
         'title',
@@ -85,9 +76,7 @@ router.put('/posts/:id', (req, res) => {
     BlogPost
         .findByIdAndUpdate(req.params.id, { $set: updated }, { new: true })
         .then(updatedPost => {
-            res.status(200).json({
-                message: 'You successfully updated your post.'
-            });
+            res.status(200).json(updatedPost);
         })
         .catch(err => {
             res.status(500).json({

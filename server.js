@@ -4,18 +4,22 @@ const mongoose = require('mongoose');
 const { DATABASE_URL, PORT } = require('./config');
 const blogPostRouter = require('./routers/blog-post-router');
 const BlogPost = require('./models/blog-post-model');
+const bodyParser = require('body-parser');
 
 const cors = require('cors');
 const { CLIENT_ORIGIN } = require('./config');
 
 //middleware
+app.use(bodyParser.json());
 app.use(
     cors({
         origin: CLIENT_ORIGIN
     })
 );
 
-app.use(express.urlencoded({ extended: true }));
+
+// app.use(express.urlencoded({ extended: true }));
+
 
 
 // Routes
