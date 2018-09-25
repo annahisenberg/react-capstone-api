@@ -5,6 +5,8 @@ const { DATABASE_URL, PORT } = require('./config');
 const blogPostRouter = require('./routers/blog-post-router');
 const BlogPost = require('./models/blog-post-model');
 const bodyParser = require('body-parser');
+const passport = require('passport');
+const { localStrategy, jwtStrategy } = require('./auth');
 
 const cors = require('cors');
 const { CLIENT_ORIGIN } = require('./config');
@@ -17,6 +19,8 @@ app.use(
     })
 );
 
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 // app.use(express.urlencoded({ extended: true }));
 

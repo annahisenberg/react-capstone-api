@@ -14,7 +14,6 @@ router.get('/posts', (req, res) => {
                 error: err.message
             });
         });
-
 });
 
 //get post by specific id
@@ -95,7 +94,7 @@ router.delete('/posts/:id', (req, res) => {
             if (count) {
                 res.status(204).end();
             } else {
-
+                //do something
             }
         })
 });
