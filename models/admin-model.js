@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-const UserSchema = mongoose.Schema({
+const AdminSchema = mongoose.Schema({
     username: {
         type: String,
         required: true,
@@ -14,6 +14,8 @@ const UserSchema = mongoose.Schema({
     }
 });
 
-const User = mongoose.model('User', UserSchema);
+const Admin = mongoose.model('Admin', AdminSchema);
 
-module.exports = User;
+//validatePassword method
+
+module.exports = Admin;
