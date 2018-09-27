@@ -21,6 +21,44 @@ const localAuth = passport.authenticate('local', { session: false });
 
 router.use(bodyParser.json());
 
+//create new admin user
+router.post('/signup', (req, res) => {
+    const { username } = req.body;
+    const { password } = req.body;
+
+    Admin
+        .findOne({ username })
+        .then(_user => {
+            if (_user) {
+                //there is already an existing user w/ the same username in DB
+                return Promise.reject({
+                    code: 422,
+                    reason: 'ValidationError',
+                    message: 'Username already taken',
+                    location: 'username'
+                });
+            }
+            //If there is no existing user, hash the password
+            return Admin.hashPassword(pass);
+        })
+        .then(hash => {
+            return Admin.create({
+                username,
+                password: hash
+            });
+        })
+        .then(newUser => {
+            return res.status(201).json(newUser);
+        })
+        .catch(err => {
+            if (err.reason === 'ValidationError') {
+                return res.status(err.code).json(err);
+            }
+            res.status(500).json({ code: 500, message: 'Internal server error' });
+        });
+});
+
+//login admin 
 router.post('/login', localAuth, (req, res) => {
     const authToken = createAuthToken(req.user); //where is "user" coming from here??
     res.json({ authToken });

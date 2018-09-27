@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const BlogPost = require('../models/blog-post-model');
+// const slug = require('slug');
+const slugify = require("slugify");
 
 //get all posts
 router.get('/posts', (req, res) => {
@@ -40,7 +42,8 @@ router.post('/posts', (req, res) => {
         date: req.body.date,
         author: req.body.author,
         category: req.body.category,
-        image: req.body.image
+        image: req.body.image,
+        slug: slugify(req.body.title).toLowerCase()
     }
 
 
@@ -51,7 +54,7 @@ router.post('/posts', (req, res) => {
             res.status(500).json({
                 error: err.message
             });
-        })
+        });
 });
 
 //update post
