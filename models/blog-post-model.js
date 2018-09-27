@@ -25,8 +25,13 @@ const blogPostSchema = mongoose.Schema({
         body: String,
         date: Date,
         username: String
-    }
+    },
+    slug: String
 });
+
+// blogPostSchema.methods.slugify = function() {
+//     this.slug = slug(this.title)
+// }
 
 const BlogPost = mongoose.model('BlogPost', blogPostSchema);
 

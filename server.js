@@ -6,7 +6,7 @@ const blogPostRouter = require('./routers/blog-post-router');
 const BlogPost = require('./models/blog-post-model');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-const { localStrategy, jwtStrategy } = require('./auth');
+const { localStrategy, jwtStrategy } = require('./auth/strategies');
 
 const cors = require('cors');
 const { CLIENT_ORIGIN } = require('./config');
@@ -42,16 +42,17 @@ app.get('/api/*', (req, res) => {
 let server;
 
 // this function connects to our database, then starts the server
-function runServer(databaseUrl, port = PORT) {
+function runServer() {
     return new Promise((resolve, reject) => {
-        mongoose.connect(databaseUrl, err => {
+        mongoose.connect(DATABASE_URL, { useNewUrlParser: true }, err => {
             if (err) {
                 return reject(err);
             }
-            server = app.listen(port, () => {
-                console.log(`Your app is listening on port ${port}`);
-                resolve();
-            })
+            server = app
+                .listen(PORT, () => {
+                    console.log(`Your app is listening on port ${PORT}`);
+                    resolve();
+                })
                 .on('error', err => {
                     mongoose.disconnect();
                     reject(err);
