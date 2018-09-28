@@ -4,6 +4,7 @@ const express = require('express');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const Admin = require('../models/admin-model');
 
 const config = require('../config');
 const router = express.Router();
@@ -18,13 +19,13 @@ const createAuthToken = function (user) {
 }
 
 const localAuth = passport.authenticate('local', { session: false });
+const jwtAuth = passport.authenticate('jwt', { session: false });
 
 router.use(bodyParser.json());
 
 //create new admin user
 router.post('/signup', (req, res) => {
-    const { username } = req.body;
-    const { password } = req.body;
+    const { username, password } = req.body;
 
     Admin
         .findOne({ username })
@@ -39,7 +40,7 @@ router.post('/signup', (req, res) => {
                 });
             }
             //If there is no existing user, hash the password
-            return Admin.hashPassword(pass);
+            return Admin.hashPassword(password);
         })
         .then(hash => {
             return Admin.create({
@@ -64,11 +65,11 @@ router.post('/login', localAuth, (req, res) => {
     res.json({ authToken });
 });
 
-const jwtAuth = passport.authenticate('jwt', { session: false });
+
 // The user exchanges a valid JWT for a new one with a later expiration
 router.post('/refresh', jwtAuth, (req, res) => {
     const authToken = createAuthToken(req.user);
     res.json({ authToken });
 });
 
-module.exports = { router };
+module.exports = router;

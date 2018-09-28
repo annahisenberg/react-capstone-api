@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 const { DATABASE_URL, PORT } = require('./config');
 const blogPostRouter = require('./routers/blog-post-router');
+const adminRouter = require('./auth/router');
 const BlogPost = require('./models/blog-post-model');
 const bodyParser = require('body-parser');
 const passport = require('passport');
@@ -22,12 +23,10 @@ app.use(
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-// app.use(express.urlencoded({ extended: true }));
-
-
 
 // Routes
 app.use('/api', blogPostRouter);
+app.use('/api', adminRouter);
 
 
 
