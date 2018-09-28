@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const BlogPost = require('../models/blog-post-model');
-// const slug = require('slug');
+const passport = require('passport');
 const slugify = require("slugify");
+const jwtAuth = passport.authenticate('jwt', { session: false });
 
 //get all posts
 router.get('/posts', (req, res) => {
@@ -34,16 +35,13 @@ router.get('/posts/:id', (req, res) => {
 });
 
 //create new post
-router.post('/posts', (req, res) => {
+router.post('/posts', jwtAuth, (req, res) => {
     const payload = {
         title: req.body.title,
         body: req.body.body,
         tags: req.body.tags,
-        date: req.body.date,
-        author: req.body.author,
         category: req.body.category,
-        image: req.body.image,
-        slug: slugify(req.body.title).toLowerCase()
+        image: req.body.image
     }
 
 
@@ -58,7 +56,7 @@ router.post('/posts', (req, res) => {
 });
 
 //update post
-router.put('/posts/:id', (req, res) => {
+router.put('/posts/:id', jwtAuth, (req, res) => {
     const updated = {};
     const updateableFields = [
         'title',
@@ -88,7 +86,7 @@ router.put('/posts/:id', (req, res) => {
 });
 
 //delete post 
-router.delete('/posts/:id', (req, res) => {
+router.delete('/posts/:id', jwtAuth, (req, res) => {
     const { id } = req.params;
 
     BlogPost

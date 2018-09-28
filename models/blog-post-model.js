@@ -1,6 +1,7 @@
 'use strict';
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
+const slugify = require('slugify');
 
 //schema
 const blogPostSchema = mongoose.Schema({
@@ -17,7 +18,10 @@ const blogPostSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    author: String,
+    author: {
+        type: String,
+        default: "Annah Isenberg"
+    },
     category: String,
     likes: Number,
     image: String,
@@ -26,12 +30,22 @@ const blogPostSchema = mongoose.Schema({
         date: Date,
         username: String
     },
-    slug: String
+    slug: {
+        type: String,
+        required: true
+    }
 });
 
-// blogPostSchema.methods.slugify = function() {
-//     this.slug = slug(this.title)
-// }
+blogPostSchema.methods.slugify = function () {
+    this.slug = slugify(this.title, {
+        lower: true
+    });
+}
+
+blogPostSchema.pre('validate', function (next) {
+    this.slugify();
+    next();
+});
 
 const BlogPost = mongoose.model('BlogPost', blogPostSchema);
 
