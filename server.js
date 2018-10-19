@@ -3,6 +3,8 @@ const app = express();
 const mongoose = require('mongoose');
 const { DATABASE_URL, PORT } = require('./config');
 const blogPostRouter = require('./routers/blog-post-router');
+const tagsRouter = require('./routers/tags-router');
+const contactRouter = require('./routers/contact-router');
 const adminRouter = require('./auth/router');
 const BlogPost = require('./models/blog-post-model');
 const bodyParser = require('body-parser');
@@ -27,6 +29,8 @@ passport.use(jwtStrategy);
 // Routes
 app.use('/api', blogPostRouter);
 app.use('/api', adminRouter);
+app.use('/api', tagsRouter);
+app.use('/api', contactRouter);
 
 
 

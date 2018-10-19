@@ -17,6 +17,7 @@
         "express": "^4.16.3",
         "faker": "^4.1.0",
         "mongoose": "^5.2.14",
+        "nodemailer": "^4.6.8",
         "passport": "^0.4.0",
         "passport-jwt": "^4.0.0",
         "passport-local": "^1.0.0",
