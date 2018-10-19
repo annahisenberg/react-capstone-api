@@ -5,11 +5,13 @@ const passport = require('passport');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 //get all posts
-router.get('/posts', (req, res) => {
+router.get('/posts/:increaseLimit?', (req, res) => {
+    let increaseLimit = req.params.increaseLimit
+
     BlogPost
         .find()
         .sort({ 'date': -1 })
-        .limit(3)
+        .limit(Number(increaseLimit))
         .then(posts => {
             res.json(posts);
         })
@@ -21,7 +23,7 @@ router.get('/posts', (req, res) => {
 });
 
 //get post by specific id
-router.get('/posts/:slug', (req, res) => {
+router.get('/posts/post/:slug', (req, res) => {
     const { slug } = req.params;
 
     BlogPost
@@ -62,7 +64,7 @@ router.post('/posts', jwtAuth, (req, res) => {
 });
 
 //update post
-router.put('/posts/:slug', jwtAuth, (req, res) => {
+router.put('/posts/post/:slug', jwtAuth, (req, res) => {
     const updated = {};
     const updateableFields = [
         'title',
@@ -92,7 +94,7 @@ router.put('/posts/:slug', jwtAuth, (req, res) => {
 });
 
 //delete post 
-router.delete('/posts/:slug', jwtAuth, (req, res) => {
+router.delete('/posts/post/:slug', jwtAuth, (req, res) => {
     const { slug } = req.params;
 
     BlogPost
