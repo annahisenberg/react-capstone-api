@@ -27,9 +27,11 @@ router.use(bodyParser.json());
 router.post('/signup', (req, res) => {
     const { username, password } = req.body;
 
-    Admin
+    return Admin
         .findOne({ username })
         .then(_user => {
+            console.log("user", _user);
+
             if (_user) {
                 //there is already an existing user w/ the same username in DB
                 return Promise.reject({

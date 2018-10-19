@@ -13,7 +13,7 @@ const blogPostSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    tags: Array,
+    tags: [String],
     date: {
         type: Date,
         default: Date.now
@@ -22,7 +22,6 @@ const blogPostSchema = mongoose.Schema({
         type: String,
         default: "Annah Isenberg"
     },
-    category: String,
     likes: Number,
     image: String,
     comments: {
@@ -32,7 +31,8 @@ const blogPostSchema = mongoose.Schema({
     },
     slug: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     }
 });
 
@@ -43,9 +43,14 @@ blogPostSchema.methods.slugify = function () {
 }
 
 blogPostSchema.pre('validate', function (next) {
+    this.lowercaseTags();
     this.slugify();
     next();
 });
+
+blogPostSchema.methods.lowercaseTags = function () {
+    this.tags = this.tags.map(tag => tag.toLowerCase());
+}
 
 const BlogPost = mongoose.model('BlogPost', blogPostSchema);
 
