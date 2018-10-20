@@ -56,7 +56,7 @@ describe('tags', function () {
         return closeServer();
     });
 
-    describe.only('GET /tags', function () {
+    describe('GET /tags', function () {
         it('should return all existing tags', function () {
             return chai.request(app)
                 .get('/api/tags')
@@ -64,15 +64,10 @@ describe('tags', function () {
                     res.should.have.status(200);
                     res.should.be.json;
                     res.body.should.be.a('array');
-                    res.body.should.have.length(4);
                     res.body.forEach(item => {
                         item.should.be.a('string');
                     });
                 });
-        });
-
-        it('should return all blog posts with the same tag', function () {
-
         });
     });
 });
