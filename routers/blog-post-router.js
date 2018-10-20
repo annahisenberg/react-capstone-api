@@ -79,7 +79,10 @@ router.put('/posts/post/:slug', jwtAuth, (req, res) => {
         }
     });
 
-    updated.tags = updated.tags.split(',').map(t => t.trim());
+    if (typeof updated.tags == 'string') {
+        updated.tags = updated.tags.split(',').map(t => t.trim());
+    }
+
 
     BlogPost
         .findOneAndUpdate({ slug: req.params.slug }, { $set: updated }, { new: true })
