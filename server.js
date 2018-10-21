@@ -16,11 +16,12 @@ const { CLIENT_ORIGIN } = require('./config');
 
 //middleware
 app.use(bodyParser.json());
-app.use(
-    cors({
-        origin: CLIENT_ORIGIN
-    })
-);
+// app.use(
+//     cors({
+//         origin: CLIENT_ORIGIN
+//     })
+// );
+app.use(cors());
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
