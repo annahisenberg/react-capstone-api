@@ -23,6 +23,14 @@ app.use(bodyParser.json());
 // );
 app.use(cors());
 
+/* *
+ *  Connect to MongoDB
+ */
+mongoose.connect(keys.mongoURL, { useNewUrlParser: true })
+    .then(() => console.log('MongoDB Connected'))
+    .catch(err => err);
+
+
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
