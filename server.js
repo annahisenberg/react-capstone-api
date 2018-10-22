@@ -21,7 +21,12 @@ app.use(bodyParser.json());
 //         origin: CLIENT_ORIGIN
 //     })
 // );
-app.use(cors());
+app.use(
+    cors({
+        origin: "*",
+        credentials: true,
+        methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    }));
 
 
 passport.use(localStrategy);
