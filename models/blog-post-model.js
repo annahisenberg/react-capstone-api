@@ -9,6 +9,10 @@ const blogPostSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    category: {
+        type: String,
+        required: true
+    },
     body: {
         type: String,
         required: true
@@ -24,6 +28,10 @@ const blogPostSchema = mongoose.Schema({
     },
     likes: Number,
     image: String,
+    published: { type: Boolean, default: false },
+    bucket: String,
+    seoUrl: String,
+    metaDescription: String,
     comments: {
         body: String,
         date: Date,

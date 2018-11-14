@@ -26,6 +26,7 @@ router.use(bodyParser.json());
 //create new admin user
 router.post('/signup', (req, res) => {
     const { username, password } = req.body;
+    console.log("GOt ", username, password);
 
     return Admin
         .findOne({ username })
