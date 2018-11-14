@@ -4,12 +4,23 @@ const BlogPost = require('../models/blog-post-model');
 const passport = require('passport');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
+
 //get all posts
-router.get('/posts/:increaseLimit?', (req, res) => {
-    let increaseLimit = req.params.increaseLimit
+router.get('/:posts/:increaseLimit?', (req, res) => {
+    const { posts } = req.params;
+    let increaseLimit = req.params.increaseLimit;
+    let find = {}
+    console.log(posts);
+
+    // @TODO: Adjust the searchbar
+    if (posts !== ' ') {
+        find = { category: posts }
+    }
+    console.log('FIND', find, posts);
+
 
     BlogPost
-        .find()
+        .find(find)
         .sort({ 'date': -1 })
         .limit(Number(increaseLimit))
         .then(posts => {
@@ -22,12 +33,13 @@ router.get('/posts/:increaseLimit?', (req, res) => {
         });
 });
 
-//get post by specific id
+// GET SINGLE POST
 router.get('/posts/post/:slug', (req, res) => {
     const { slug } = req.params;
+    console.log(slug);
 
     BlogPost
-        .findOne({ slug })
+        .findOne({ seoUrl: slug })
         .then(post => {
             if (!post) {
                 return Promise.reject(new Error('Blog post not found'));
@@ -47,11 +59,13 @@ router.post('/posts', jwtAuth, (req, res) => {
     const payload = {
         title: req.body.title,
         body: req.body.body,
-        tags: req.body.tags.split(',').map(t => t.trim()),
-        category: req.body.category,
+        category: req.body.category.toLowerCase(),
+        bucket: req.body.seoUrl.toLowerCase(),
+        seoUrl: req.body.seoUrl.toLowerCase(),
+        metaDescription: req.body.metaDescription,
+        // tags: req.body.tags.split(',').map(t => t.trim()),
         image: req.body.image
     }
-
 
     BlogPost
         .create(payload)
@@ -70,8 +84,10 @@ router.put('/posts/post/:slug', jwtAuth, (req, res) => {
         'title',
         'body',
         'tags',
+        'seoUrl',
         'date',
-        'image'
+        'image',
+        'metaDescription'
     ];
     updateableFields.forEach(field => {
         if (field in req.body) {
