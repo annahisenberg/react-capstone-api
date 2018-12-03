@@ -6,7 +6,7 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 
 function queryTitleTagCategory(section, searchTerm) {
     // return new Promise((resolve, reject) => {
-    return BlogPost.find({ [section]: searchTerm }, 'title category image seoUrl')
+    return BlogPost.find({ [section]: searchTerm }, 'title category body image seoUrl')
         .sort({ 'date': -1 })
         .then(el => el)
         .catch(err => err)
