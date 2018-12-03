@@ -36,7 +36,7 @@ router.get('/:posts/:increaseLimit?', (req, res) => {
 // GET SINGLE POST
 router.get('/posts/post/:slug', (req, res) => {
     const { slug } = req.params;
-    console.log(slug);
+
 
     BlogPost
         .findOne({ seoUrl: slug })
@@ -56,36 +56,38 @@ router.get('/posts/post/:slug', (req, res) => {
 
 //create new post
 router.post('/posts', jwtAuth, (req, res) => {
-    const payload = {
-        title: req.body.title,
-        body: req.body.body,
-        category: req.body.category.toLowerCase(),
-        bucket: req.body.seoUrl.toLowerCase(),
-        seoUrl: req.body.seoUrl.toLowerCase(),
-        metaDescription: req.body.metaDescription,
-        // tags: req.body.tags.split(',').map(t => t.trim()),
-        image: req.body.image
+    const resp = req.body;
+    let payload = {
+        title: resp.title,
+        body: resp.body,
+        category: resp.category ? resp.category.toLowerCase() : '',
+        bucket: resp.bucket ? resp.bucket.toLowerCase() : '',
+        seoUrl: resp.seoUrl ? resp.seoUrl.toLowerCase() : '',
+        metaDescription: resp.metaDescription,
+        tags: resp.tags ? resp.tags.split(',').map(t => t.trim()) : '',
+        image: resp.image
     }
+
+
+    console.log(payload);
 
     BlogPost
         .create(payload)
         .then(newPost => res.status(201).json(newPost))
-        .catch(() => {
-            res.status(500).json({
-                error: "Duplicate entry error"
-            });
-        });
+        .catch(() => { res.status(500).json({ error: "Duplicate entry error" }); });
 });
 
 //update post
 router.put('/posts/post/:slug', jwtAuth, (req, res) => {
-    const updated = {};
+    let updated = {};
     const updateableFields = [
         'title',
         'body',
         'tags',
         'seoUrl',
+        'category',
         'date',
+        'published',
         'image',
         'metaDescription'
     ];
@@ -99,6 +101,7 @@ router.put('/posts/post/:slug', jwtAuth, (req, res) => {
         updated.tags = updated.tags.split(',').map(t => t.trim());
     }
 
+    updated.body = req.body.body;
 
     BlogPost
         .findOneAndUpdate({ slug: req.params.slug }, { $set: updated }, { new: true })
