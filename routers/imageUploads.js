@@ -20,11 +20,10 @@ var s3 = new AWS.S3(awsCredentials);
 // Add image to s3
 router.post('/:folderPost', (req, res) => {
 
-
     let upload = multer({
         storage: multerS3({
             s3: s3,
-            bucket: 'livingwithannah',
+            bucket: `${CONFIG.BUCKET_NAME}`,
             acl: 'public-read',
             contentType: multerS3.AUTO_CONTENT_TYPE,
             metadata: function (req, file, cb) {
@@ -32,9 +31,8 @@ router.post('/:folderPost', (req, res) => {
             },
             key: function (req, file, cb) {
                 const { folderPost } = req.params;
-                console.log(folderPost);
-
-                cb(null, `${folderPost}/${file.originalname}`)
+                console.log('UPLOADIMAGE', folderPost);
+                cb(null, `img/${folderPost}/${file.originalname}`)
             }
         })
     });
@@ -44,8 +42,6 @@ router.post('/:folderPost', (req, res) => {
         if (err) {
             return res.status(422).send({ errors: [{ title: 'Image Upload Error', detail: err.message }] });
         }
-        // console.log('Successful ', req.file);
-
         return res.json({ 'imageUrl': req.file });
     });
 
@@ -55,8 +51,8 @@ router.get('/:folder', (req, res) => {
     const { folder } = req.params;
 
     var params = {
-        Bucket: 'livingwithannah',
-        Prefix: `${folder}`
+        Bucket: `${CONFIG.BUCKET_NAME}`,
+        Prefix: `img/${folder}/`
     };
 
     s3.listObjectsV2(params, function (err, data) {
@@ -71,21 +67,18 @@ router.delete('/:folder/:fileToDelete', (req, res) => {
 
     const { fileToDelete } = req.params;
     const { folder } = req.params;
-    // console.log(req.body.fileToDelete);
-    console.log(req.body);
-    console.log(`${folder}/${fileToDelete}`);
-
+    // console.log(`${folder}/${fileToDelete}`);
     s3.deleteObject({
-        Bucket: 'livingwithannah',
+        Bucket: `${CONFIG.BUCKET_NAME}/img`,
         Key: `${folder}/${fileToDelete}`
     }, function (err, data) {
         if (err) {
             return res.json({ 'err': err });
         }
-        console.log("DELETED!!! ");
-
         res.json({
-            'success': 'Deleted!', path: `${folder}/${fileToDelete}`
+            'success': 'Deleted!',
+            path: `${folder}/${fileToDelete}`,
+            data
         });
     })
 });

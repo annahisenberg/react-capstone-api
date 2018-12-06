@@ -16,15 +16,17 @@ const upload = () => {
     return multer({
         storage: multerS3({
             s3: s3,
-            bucket: 'livingwithannah',
+            bucket: CONFIG.BUCKET_NAME,
             acl: 'public-read',
             contentType: multerS3.AUTO_CONTENT_TYPE,
             metadata: function (req, file, cb) {
                 cb(null, { fieldName: file.fieldname });
             },
             key: function (req, file, cb) {
+                console.log("IMAGE", req.params);
+
                 const { folder } = req.params;
-                cb(null, `${folder}/${file.originalname}`)
+                cb(null, `img/${folder}/${file.originalname}`)
             }
         })
     });
