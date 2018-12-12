@@ -2,6 +2,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const slugify = require('slugify');
+const Schema = mongoose.Schema;
 
 //schema
 const blogPostSchema = mongoose.Schema({
@@ -32,11 +33,20 @@ const blogPostSchema = mongoose.Schema({
     bucket: String,
     seoUrl: String,
     metaDescription: String,
-    comments: {
+    comment: [
+        {
+            id: { type: Schema.Types.ObjectId, ref: 'UsersDB' },
+            comment: String,
+            date: { type: Date, default: Date.now },
+        }
+    ],
+    comments: [{
         body: String,
-        date: Date,
-        username: String
-    },
+        date: { type: Date, default: Date.now },
+        id: String,
+        username: String,
+        publish: { type: Boolean, default: false },
+    }],
     slug: {
         type: String,
         required: true,

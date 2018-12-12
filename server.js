@@ -7,6 +7,7 @@ const tagsRouter = require('./routers/tags-router');
 const contactRouter = require('./routers/contact-router');
 const searchTerm = require('./routers/search');
 const imageUploads = require('./routers/imageUploads');
+const comments = require('./routers/comments');
 const adminRouter = require('./auth/router');
 const BlogPost = require('./models/blog-post-model');
 const bodyParser = require('body-parser');
@@ -46,6 +47,7 @@ passport.use(jwtStrategy);
 
 // Routes
 app.use('/api', blogPostRouter);
+app.use('/comments', comments);
 app.use('/api', adminRouter);
 app.use('/api', tagsRouter);
 app.use('/api', contactRouter);
