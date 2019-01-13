@@ -45,22 +45,27 @@ router.get('/posts/post/:slug', (req, res) => {
             path: 'comment.id',
             model: UsersDB,
             select: 'firstName lastName avatar ',
+            populate: { path: 'comment.id' }
+        }
+        )
+        .exec((err, post) => {
+            console.log(post);
+            res.json(post)
         })
-        // .exec((err, post) => {
-        //     res.json(post)
-        // })
-        .then(post => {
-            if (!post) {
-                return Promise.reject(new Error('Blog post not found'));
-            }
-            return post;
-        })
-        .then(post => res.json(post))
-        .catch(err => {
-            res.status(500).json({
-                error: err.message
-            });
-        });
+    // .then(post => {
+    //     if (!post) {
+    //         return Promise.reject(new Error('Blog post not found'));
+    //     }
+    //     return post;
+    // })
+    // .then(post => {
+    //     res.json(post)
+    // })
+    // .catch(err => {
+    //     res.status(500).json({
+    //         error: err.message
+    //     });
+    // });
 });
 
 //create new post

@@ -17,6 +17,31 @@ const awsCredentials = new AWS.Config({
 
 var s3 = new AWS.S3(awsCredentials);
 
+
+
+// Create JSON and save to s3
+router.post('/create', (req, res) => {
+
+    var person = {
+        name: 'Update',
+        age: "DONE!"
+    };
+
+    const params = {
+        Bucket: `${CONFIG.BUCKET_NAME}`,
+        Key: 'img/contacts.json', // file will be saved as testBucket/contacts.csv
+        Body: JSON.stringify(person),
+    };
+
+    return s3.upload(params, function (s3Err, data) {
+        console.log('DATAL ', data);
+        if (s3Err) throw s3Err
+        console.log(`File uploaded successfully at ${data.Location}`)
+        res.json({ ok: true, data })
+    });
+
+});
+
 // Add image to s3
 router.post('/:folderPost', (req, res) => {
 
@@ -36,7 +61,6 @@ router.post('/:folderPost', (req, res) => {
             }
         })
     });
-
 
     upload.single('image')(req, res, function (err, some) {
         if (err) {

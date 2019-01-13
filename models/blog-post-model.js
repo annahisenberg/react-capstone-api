@@ -33,22 +33,18 @@ const blogPostSchema = mongoose.Schema({
     bucket: String,
     seoUrl: String,
     metaDescription: String,
+    quickReply: [],
     comment: [
         {
             id: { type: Schema.Types.ObjectId, ref: 'UsersDB' },
             comment: String,
+            public: { type: String, default: false },
             date: { type: Date, default: Date.now },
         }
     ],
-    comments: [{
-        body: String,
-        date: { type: Date, default: Date.now },
-        id: String,
-        username: String,
-        publish: { type: Boolean, default: false },
-    }],
     slug: {
         type: String,
+        lowercase: true,
         required: true,
         unique: true
     }

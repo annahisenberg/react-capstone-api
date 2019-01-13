@@ -7,6 +7,7 @@ const tagsRouter = require('./routers/tags-router');
 const contactRouter = require('./routers/contact-router');
 const searchTerm = require('./routers/search');
 const imageUploads = require('./routers/imageUploads');
+const userRegistration = require('./routers/userRegistration');
 const comments = require('./routers/comments');
 const adminRouter = require('./auth/router');
 const BlogPost = require('./models/blog-post-model');
@@ -53,6 +54,7 @@ app.use('/api', tagsRouter);
 app.use('/api', contactRouter);
 app.use('/search', searchTerm);
 app.use('/uploads', imageUploads);
+app.use('/register', userRegistration);
 
 
 
