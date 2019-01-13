@@ -8,6 +8,8 @@ const { JWT_SECRET } = require('../config');
 const localStrategy = new LocalStrategy((username, password, callback) => {
     let user;
 
+    console.log("********** ", username, password, username);
+
     Admin
         .findOne({ username: username })
         .then(_user => {
@@ -42,7 +44,9 @@ const jwtStrategy = new JwtStrategy(
         jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
         algorithms: ['HS256']
     }, (payload, done) => {
-        done(null, payload.user);
+        console.log(payload);
+
+        done(null, payload);
     }
 );
 

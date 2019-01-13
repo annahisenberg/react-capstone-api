@@ -3,6 +3,7 @@ const router = express.Router();
 const BlogPost = require('../models/blog-post-model');
 const passport = require('passport');
 const jwtAuth = passport.authenticate('jwt', { session: false });
+const UsersDB = require('../models/users');
 
 
 //get all posts
@@ -37,21 +38,34 @@ router.get('/:posts/:increaseLimit?', (req, res) => {
 router.get('/posts/post/:slug', (req, res) => {
     const { slug } = req.params;
 
-
     BlogPost
         .findOne({ seoUrl: slug })
-        .then(post => {
-            if (!post) {
-                return Promise.reject(new Error('Blog post not found'));
-            }
-            return post;
+        // .populate('comment.id')
+        .populate({
+            path: 'comment.id',
+            model: UsersDB,
+            select: 'firstName lastName avatar ',
+            populate: { path: 'comment.id' }
+        }
+        )
+        .exec((err, post) => {
+            console.log(post);
+            res.json(post)
         })
-        .then(post => res.json(post))
-        .catch(err => {
-            res.status(500).json({
-                error: err.message
-            });
-        });
+    // .then(post => {
+    //     if (!post) {
+    //         return Promise.reject(new Error('Blog post not found'));
+    //     }
+    //     return post;
+    // })
+    // .then(post => {
+    //     res.json(post)
+    // })
+    // .catch(err => {
+    //     res.status(500).json({
+    //         error: err.message
+    //     });
+    // });
 });
 
 //create new post
